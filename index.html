@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apoiar Para Transformar - ONG</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (v3 Script para melhor compatibilidade em arquivo único) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & Babel for JSX -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Framer Motion & Lucide Icons -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Open Sans"', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        secondary: '#fbbf24',
+                        amber: {
+                            500: '#f59e0b',
+                        },
+                        bgDark: '#0f172a',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: #0f172a;
+            color: white;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 0% 0%, #1e3a8a 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, #1e40af 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+        .glass-header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.2);
+        }
+        .pillar-icon {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { motion, AnimatePresence } = window.FramerMotion;
+
+        // --- Mock Component for Icons (Lucide integration via CDN) ---
+        const Icon = ({ name, size = 24, className = "" }) => {
+            const iconRef = useRef(null);
+            useEffect(() => {
+                if (iconRef.current) {
+                    iconRef.current.innerHTML = lucide.createIcons({
+                        icons: { [name]: true },
+                        attrs: { 'stroke-width': 2, width: size, height: size }
+                    });
+                }
+            }, [name, size]);
+            return <span ref={iconRef} className={`inline-block ${className}`} />;
+        };
+
+        const Header = () => {
+            const [isScrolled, setIsScrolled] = useState(false);
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+            useEffect(() => {
+                const handleScroll = () => setIsScrolled(window.scrollY > 20);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const navLinks = [
+                { name: 'Nossos Pilares', href: 'https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing', external: true },
+                { name: 'Impacto', href: '#impacto' },
+                { name: 'Seja um doador', href: '#doacao' },
+            ];
+
+            return (
+                <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-header py-3' : 'bg-transparent py-5'}`}>
+                    <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
+                        <div className="flex-1 md:flex-none flex justify-center md:justify-start">
+                            <a href="#" className="flex items-center group">
+                                <div className="h-20 md:h-28 w-auto overflow-hidden">
+                                    <img src="https://i.imgur.com/0TNZgaJ.png" alt="Logo" className="h-full w-auto object-contain transition-transform group-hover:scale-105" />
+                                </div>
+                            </a>
+                        </div>
+                        <nav className="hidden md:flex items-center gap-8">
+                            {navLinks.map((link) => (
+                                <a key={link.name} href={link.href} target={link.external ? "_blank" : "_self"} className="text-gray-300 font-semibold hover:text-secondary transition-colors text-sm uppercase tracking-wider">
+                                    {link.name}
+                                </a>
+                            ))}
+                            <a href="https://wa.me/5562993228453" target="_blank" className="btn-gold text-[#0f172a] px-6 py-2.5 rounded-full font-bold hover:translate-y-[-2px] transition-all shadow-md active:scale-95 uppercase text-sm tracking-wide">
+                                Quero Apoiar
+                            </a>
+                        </nav>
+                        <button className="md:hidden text-white absolute right-6" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                            <Icon name={isMenuOpen ? "X" : "Menu"} size={28} />
+                        </button>
+                    </div>
+                </header>
+            );
+        };
+
+        const Hero = () => (
+            <section className="relative pt-32 pb-20 md:pt-48 md:pb-40 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                    <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 glass">
+                            <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
+                            <span className="text-secondary text-xs font-bold uppercase tracking-widest">Apoiar Para Transformar</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl leading-tight mb-6">Transformando <br/><span className="text-white/90">Vidas e Futuros.</span></h1>
+                        <p className="text-gray-300 text-lg leading-relaxed mb-8 max-w-lg">Suporte integral educacional, profissional, jurídico e psicológico para famílias de pessoas privadas de liberdade no Estado de Goiás.</p>
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <a href="#doacao" className="btn-gold text-[#0f172a] px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl active:scale-95 uppercase tracking-wide">
+                                Seja um doador <Icon name="Heart" size={20} />
+                            </a>
+                            <a href="https://wa.me/5562993228453" target="_blank" className="px-8 py-4 rounded-xl font-bold border border-white/10 glass text-white flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95 uppercase tracking-wide">
+                                Fale Conosco <Icon name="MessageCircle" size={20} />
+                            </a>
+                        </div>
+                        <div className="flex gap-12 items-center border-t border-white/10 mt-12 pt-8">
+                            <div><p className="text-secondary font-bold text-3xl">300</p><p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Atendimentos/mês</p></div>
+                            <div className="h-10 w-[1px] bg-white/10"></div>
+                            <div><p className="text-secondary font-bold text-3xl">14k+</p><p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Alcance Regional</p></div>
+                        </div>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
+                        <div className="aspect-square rounded-[2rem] overflow-hidden glass p-3">
+                            <img src="https://i.imgur.com/pcTYZ8v.png" alt="Apoio Social" className="w-full h-full object-cover rounded-[1.5rem]" />
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+        );
+
+        const Mission = () => {
+            const [currentSlide, setCurrentSlide] = useState(0);
+            const images = [
+                "https://i.postimg.cc/xjGXYqBP/Whats-App-Image-2026-04-22-at-14-58-58.jpg",
+                "https://i.postimg.cc/QNgFsVvJ/Whats-App-Image-2026-04-22-at-14-58-59.jpg",
+                "https://i.postimg.cc/Y2NvkjT6/Whats-App-Image-2026-04-22-at-14-59-00.jpg",
+                "https://i.postimg.cc/RC3zQYLg/Whats-App-Image-2026-04-22-at-14-58-59-(1).jpg",
+                "https://i.postimg.cc/WpQc975r/Whats-App-Image-2026-04-22-at-14-58-59-(2).jpg",
+                "https://i.postimg.cc/nV6fd13B/Whats-App-Image-2026-04-22-at-14-58-59-(3).jpg"
+            ];
+            useEffect(() => {
+                const timer = setInterval(() => setCurrentSlide((p) => (p + 1) % images.length), 4000);
+                return () => clearInterval(timer);
+            }, [images.length]);
+            return (
+                <section className="py-24 relative overflow-hidden">
+                    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                        <div className="order-2 md:order-1 relative">
+                            <div className="glass p-3 rounded-[1.5rem] w-full max-w-lg mx-auto overflow-hidden shadow-2xl relative aspect-[4/3]">
+                                <AnimatePresence mode="wait">
+                                    <motion.img key={currentSlide} src={images[currentSlide]} initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.8 }} 
+                                        className={`w-full h-full object-cover rounded-[1rem] ${[2,4,5].includes(currentSlide) ? 'object-top' : 'object-center'}`} />
+                                </AnimatePresence>
+                                <div className="absolute bottom-8 left-0 w-full flex justify-center gap-2 z-10">
+                                    {images.map((_, i) => <div key={i} className={`h-1 transition-all duration-300 rounded-full ${i === currentSlide ? 'w-8 bg-secondary' : 'w-2 bg-white/20'}`} />)}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="order-1 md:order-2">
+                            <span className="text-secondary font-bold tracking-widest uppercase text-xs">Transformação Real</span>
+                            <h2 className="text-4xl mt-3 mb-6">Nossa Missão: <br/>Rompendo Ciclos</h2>
+                            <div className="w-16 h-1 bg-secondary/50 mb-8 rounded-full" />
+                            <p className="text-lg text-gray-300 mb-8 leading-relaxed">Baseados nos princípios inalienáveis da <strong>dignidade humana</strong>, oferecemos amparo a quem foi esquecido pela sociedade no Estado de Goiás.</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {['Acolhimento empático', 'Resgate da autoestima', 'Fortalecimento familiar', 'Inclusão Social'].map(i => (
+                                    <div key={i} className="flex items-center gap-3 p-3 glass border border-white/5"><Icon name="CheckCircle2" size={16} className="text-secondary"/><span className="font-semibold text-xs uppercase tracking-wide">{i}</span></div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Partners = () => (
+            <section className="py-16">
+                <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all font-bold uppercase tracking-widest">
+                    {['SEBRAE-GO', 'SENAI', 'ACIEG', 'Estado de Goiás'].map(p => <span key={p}>{p}</span>)}
+                </div>
+            </section>
+        );
+
+        const ProjectOverview = () => (
+            <section className="py-24 relative">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="glass p-10 md:p-16 border-white/10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10"><Icon name="BookOpen" size={120} className="text-secondary" /></div>
+                        <div className="max-w-3xl">
+                            <span className="text-secondary font-bold tracking-widest uppercase text-xs">Visão Geral</span>
+                            <h2 className="text-3xl md:text-5xl mt-3 mb-8">Nossa Metodologia de Impacto</h2>
+                            <p className="text-gray-300 text-lg leading-relaxed mb-12">Estruturado em eixos de Educação, Empreendedorismo, Assistência Jurídica e Acompanhamento Psicológico para autonomia das famílias.</p>
+                            <a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank" className="btn-gold text-primary px-8 py-4 rounded-xl font-bold inline-flex items-center gap-3 uppercase tracking-wide group">
+                                Ler Documento Completo <Icon name="ExternalLink" size={20} />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Pillars = () => (
+            <section id="pilares" className="py-24">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Eixos de Atuação</span>
+                        <h2 className="text-3xl md:text-5xl mt-3 mb-4">Os 4 Pilares do Apoio</h2>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                        {[
+                            {t: 'Educacional', d: 'Foco em alfabetização e parcerias com o EJA.', i: '🎓'},
+                            {t: 'Empreendedorismo', d: 'Oficinas de costura, hortas e gestão.', i: '🧵'},
+                            {t: 'Jurídico', d: 'Garantia de direitos e orientação processual.', i: '⚖️'},
+                            {t: 'Psicológico', d: 'Acolhimento para mulheres e crianças.', i: '🧠'}
+                        ].map(p => (
+                            <div key={p.t} className="glass p-8 flex flex-col items-center">
+                                <div className="w-16 h-16 pillar-icon rounded-2xl flex items-center justify-center mb-6 text-3xl">{p.i}</div>
+                                <h3 className="text-xl mb-4">{p.t}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed">{p.d}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Donations = () => (
+            <section className="py-24 relative overflow-hidden">
+                <div id="doacao" className="absolute -top-24"></div>
+                <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Ajuda Fundamental</span>
+                        <h2 className="text-3xl md:text-5xl mt-3 mb-6">Doações via PIX</h2>
+                        <p className="text-lg text-gray-300 mb-8 leading-relaxed">Escaneie o QR Code ao lado para realizar sua doação e nos ajude a expandir nossa missão no Estado de Goiás.</p>
+                        <a href="https://wa.me/5562993228453" target="_blank" className="inline-flex items-center gap-3 border border-white/20 glass text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-white/10 active:scale-95 text-sm">
+                            Tirar Dúvidas <Icon name="MessageCircle" size={20} className="text-secondary"/>
+                        </a>
+                    </div>
+                    <div className="flex justify-center">
+                        <div className="glass p-6 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+                            <img src="https://i.postimg.cc/KvR4TQRP/Doacao-Apoiar-Para-Transformar.jpg" alt="QR PIX" className="w-full h-auto rounded-[1.5rem]" />
+                            <p className="text-center text-gray-400 mt-6 text-xs uppercase tracking-widest font-bold">Apoiar Para Transformar</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Volunteer = () => (
+            <section className="py-24">
+                <div className="max-w-7xl mx-auto px-6 text-center glass p-12 md:p-20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-secondary/5 -z-10" />
+                    <h2 className="text-4xl md:text-6xl font-bold mb-6">Seja um Voluntário</h2>
+                    <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10">Sua dedicação pode transformar o futuro de muitas famílias. Junte-se a nós!</p>
+                    <a href="https://wa.me/5562993228453" target="_blank" className="btn-gold text-primary px-10 py-5 rounded-xl font-bold uppercase tracking-widest shadow-2xl inline-flex items-center gap-3">
+                        Quero ser Voluntário <Icon name="MessageCircle" size={24} />
+                    </a>
+                </div>
+            </section>
+        );
+
+        const FAQ = () => {
+            const [open, setOpen] = useState(0);
+            return (
+                <section id="faq" className="py-24 relative">
+                    <div id="faq" className="absolute -top-24"></div>
+                    <div className="max-w-3xl mx-auto px-6">
+                        <h2 className="text-center text-3xl mb-12">Dúvidas Frequentes</h2>
+                        <div className="space-y-4">
+                            {[
+                                {q: 'Como ser voluntário?', a: 'Entre em contato pelo nosso WhatsApp. Temos vagas para assistência jurídica, psicólogos e mentores.'},
+                                {q: 'Aceitam doações de materiais?', a: 'Sim! Aceitamos equipamentos de informática, máquinas de costura e materiais didáticos.'},
+                                {q: 'Quem atendemos?', a: 'Familiares de pessoas privadas de liberdade em vulnerabilidade em Goiás.'}
+                            ].map((f, i) => (
+                                <div key={i} className="glass overflow-hidden">
+                                    <button className="w-full flex justify-between p-6 text-left font-bold uppercase text-sm tracking-wide" onClick={() => setOpen(open === i ? -1 : i)}>
+                                        {f.q} <Icon name={open === i ? "Minus" : "Plus"} size={20} className="text-secondary" />
+                                    </button>
+                                    {open === i && <div className="px-6 pb-6 text-gray-400 text-sm leading-relaxed">{f.a}</div>}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Footer = () => (
+            <footer className="pt-20 pb-10 border-t border-white/10">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid md:grid-cols-4 gap-12 mb-16">
+                        <div className="col-span-2">
+                            <img src="https://i.imgur.com/0TNZgaJ.png" alt="Logo" className="h-28 w-auto mb-6 object-contain" />
+                            <p className="text-gray-400 max-w-sm mb-8 text-sm">Restauração da dignidade humana e inclusão produtiva para famílias no Estado de Goiás.</p>
+                            <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-xs text-gray-500 uppercase tracking-widest font-bold">
+                                <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500" /> Presente em Goiás</span>
+                                <a href="https://instagram.com/apoiarparatransformar" target="_blank" className="hover:text-white transition-colors">@apoiarparatransformar</a>
+                                <a href="https://wa.me/5562993228453" target="_blank" className="hover:text-white transition-colors flex items-center gap-1 font-bold whitespace-nowrap">
+                                    <Icon name="MessageCircle" size={14} className="text-secondary" /> (62) 99322-8453
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-6">Explore</h4>
+                            <ul className="space-y-4 text-sm font-semibold text-gray-400">
+                                <li><a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank" className="hover:text-white transition-colors">Nossos Pilares</a></li>
+                                <li><a href="#impacto" className="hover:text-white transition-colors">Impacto</a></li>
+                                <li><a href="#doacao" className="hover:text-white transition-colors">Doador</a></li>
+                            </ul>
+                        </div>
+                        <div><h4 className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-6">Apoio</h4><div className="flex flex-col gap-2 text-[10px] text-gray-500 font-bold uppercase"><span>SEBRAE-GO</span><span>SENAI</span><span>ACIEG</span><span>Estado de Goiás</span></div></div>
+                    </div>
+                    <div className="pt-10 border-t border-white/5 text-center text-gray-500 text-[10px] font-bold uppercase tracking-widest">
+                        <p>© 2026 ONG Apoiar para Transformar. Todos os Direitos Reservados.</p>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        function App() {
+            return (
+                <div className="antialiased overflow-x-hidden">
+                    <Header />
+                    <main>
+                        <Hero />
+                        <Partners />
+                        <Mission />
+                        <ProjectOverview />
+                        <Pillars />
+                        <motion.div id="impacto" className="relative scroll-mt-24"><div className="max-w-7xl mx-auto px-6"><div className="glass p-12 text-center">
+                            <h2 className="text-secondary text-5xl mb-12">Impacto em Números</h2>
+                            <div className="grid md:grid-cols-3 gap-12 font-bold uppercase tracking-widest">
+                                <div><p className="text-6xl text-white mb-2">300</p><p className="text-[10px] text-secondary">Atendimentos/mês</p></div>
+                                <div className="glass border-amber-500/20 p-8"><p className="text-6xl text-white mb-2">14k+</p><p className="text-[10px] text-secondary">Alcance Estadual</p></div>
+                                <div><p className="text-6xl text-white mb-2">100%</p><p className="text-[10px] text-secondary">Gratuidade</p></div>
+                            </div>
+                        </div></div></motion.div>
+                        <Donations />
+                        <Volunteer />
+                        <FAQ />
+                    </main>
+                    <Footer />
+                    {/* Floating WhatsApp */}
+                    <a href="https://wa.me/5562993228453" target="_blank" className="fixed bottom-8 right-8 z-[100] w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl">
+                        <Icon name="MessageCircle" size={32} />
+                    </a>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
