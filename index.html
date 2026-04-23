@@ -4,395 +4,481 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apoiar Para Transformar - ONG</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (v3 Script para melhor compatibilidade em arquivo único) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & Babel for JSX -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Framer Motion & Lucide Icons -->
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Open Sans"', 'sans-serif'],
-                        display: ['Montserrat', 'sans-serif'],
-                    },
-                    colors: {
-                        secondary: '#fbbf24',
-                        amber: {
-                            500: '#f59e0b',
-                        },
-                        bgDark: '#0f172a',
-                    },
-                }
-            }
-        }
-    </script>
-
     <style>
-        html { scroll-behavior: smooth; }
-        body { 
-            background-color: #0f172a;
-            color: white;
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 0% 0%, #1e3a8a 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, #1e40af 0%, transparent 50%);
-            background-attachment: fixed;
+        /* --- Reset e Variáveis --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root {
+            --bg-color: #0f172a;
+            --primary: #fbbf24; /* Gold */
+            --secondary: #fbbf24;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        .glass-header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- Utilidades --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .glass { background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; }
+        .btn-gold { background: var(--primary); color: #0f172a; padding: 14px 32px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2); }
+        .section-padding { padding: 80px 0; }
+        .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--glass); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 100px; color: var(--primary); font-weight: bold; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+
+        /* --- Header --- */
+        header { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; transition: 0.3s; padding: 20px 0; }
+        header.scrolled { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 12px 0; border-bottom: 1px solid var(--glass-border); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box img { height: 80px; width: auto; object-contain: contain; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { font-size: 14px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero --- */
+        .hero { padding: 180px 0 100px; position: relative; }
+        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+        .hero h1 { font-size: 64px; line-height: 1.1; margin-bottom: 24px; font-weight: 800; }
+        .hero h1 span { color: rgba(248, 250, 252, 0.8); }
+        .hero p { font-size: 18px; color: var(--text-dim); margin-bottom: 40px; max-width: 500px; }
+        .hero-btns { display: flex; gap: 16px; }
+        .btn-outline { border: 1px solid var(--glass-border); padding: 14px 32px; border-radius: 12px; font-weight: bold; color: white; background: var(--glass); display: inline-flex; align-items: center; gap: 8px; text-transform: uppercase; font-size: 14px; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); }
+        .hero-stats { display: flex; gap: 48px; border-top: 1px solid var(--glass-border); margin-top: 48px; padding-top: 32px; }
+        .stat-item h3 { font-size: 32px; color: var(--primary); }
+        .stat-item p { font-size: 10px; font-weight: bold; text-transform: uppercase; color: var(--text-dim); margin: 0; }
+        .hero-img { border-radius: 32px; overflow: hidden; padding: 12px; }
+        .hero-img img { border-radius: 20px; width: 100%; aspect-ratio: 1; object-fit: cover; }
+
+        /* --- Partners --- */
+        .partners { padding: 40px 0; opacity: 0.3; }
+        .partner-list { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; font-weight: bold; font-size: 18px; }
+
+        /* --- Mission (Slider) --- */
+        .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .slider-container { position: relative; aspect-ratio: 4/3; width: 100%; border-radius: 24px; padding: 12px; background: var(--glass); overflow: hidden; }
+        .slider-wrapper { width: 100%; height: 100%; position: relative; overflow: hidden; border-radius: 16px; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease; object-fit: cover; }
+        .slide.active { opacity: 1; }
+        .slide.pos-top { object-position: top; }
+        .slider-dots { position: absolute; bottom: 24px; left: 0; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 10; }
+        .dot { width: 8px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px; transition: 0.3s; }
+        .dot.active { width: 32px; background: var(--primary); }
+
+        /* --- Pillars --- */
+        .pillars-header { text-align: center; margin-bottom: 60px; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+        .pillar-card { padding: 40px; }
+        .pillar-icon { font-size: 32px; margin-bottom: 24px; display: block; }
+        .pillar-card h3 { font-size: 20px; margin-bottom: 16px; font-weight: bold; }
+        .pillar-card p { color: var(--text-dim); font-size: 14px; }
+
+        /* --- Donations --- */
+        .donation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .qr-box { padding: 24px; max-width: 320px; margin: 0 auto; text-align: center; }
+        .qr-box img { border-radius: 16px; margin-bottom: 16px; }
+        .qr-box p { font-size: 12px; font-weight: bold; color: var(--text-dim); text-transform: uppercase; }
+
+        /* --- Volunteer --- */
+        .volunteer-box { text-align: center; padding: 80px 40px; background: linear-gradient(rgba(251, 191, 36, 0.05), rgba(251, 191, 36, 0.05)), var(--glass); }
+        .volunteer-box h2 { font-size: 56px; margin-bottom: 24px; }
+        .volunteer-box p { font-size: 18px; color: var(--text-dim); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* --- FAQ --- */
+        .faq-wrapper { max-width: 700px; margin: 0 auto; }
+        .faq-item { margin-bottom: 16px; border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; background: var(--glass); }
+        .faq-header { padding: 24px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .faq-body { padding: 0 24px 24px; color: var(--text-dim); font-size: 14px; display: none; }
+        .faq-item.active .faq-body { display: block; }
+        .faq-icon { transition: 0.3s; }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+
+        /* --- Footer --- */
+        footer { padding: 80px 0 40px; border-top: 1px solid var(--glass-border); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+        .footer-logo img { height: 100px; margin-bottom: 24px; }
+        .contact-info { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; font-size: 12px; text-transform: uppercase; font-weight: bold; color: var(--text-dim); }
+        .flag img { width: 32px; opacity: 0.8; margin-top: 16px; }
+        .footer-links h4 { font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 24px; }
+        .footer-links ul li { margin-bottom: 12px; font-size: 14px; font-weight: 600; color: var(--text-dim); }
+        .footer-links ul li a:hover { color: white; }
+        .copyright { border-top: 1px solid var(--glass-border); padding-top: 32px; display: flex; justify-content: space-between; font-size: 10px; color: #475569; font-weight: bold; text-transform: uppercase; }
+
+        /* --- Floating WhatsApp --- */
+        .whatsapp-float { position: fixed; bottom: 32px; right: 32px; width: 64px; height: 64px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 968px) {
+            .hero-grid, .mission-grid, .donation-grid, .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero h1 { font-size: 40px; }
+            .hero p { margin: 0 auto 30px; }
+            .hero-btns { justify-content: center; flex-direction: column; }
+            .hero-stats { justify-content: center; }
+            .nav-links { display: none; }
+            .mission-grid .order-2 { order: -1; }
+            .footer-logo { display: none; }
         }
-        .btn-gold {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.2);
-        }
-        .pillar-icon {
-            background: rgba(251, 191, 36, 0.1);
-            color: #fbbf24;
-        }
+
+        /* --- Anchor Offset --- */
+        #doacao, #impacto, #faq { position: absolute; transform: translateY(-100px); visibility: hidden; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const { motion, AnimatePresence } = window.FramerMotion;
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container header-content">
+            <a href="#" class="logo-box">
+                <img src="https://i.imgur.com/0TNZgaJ.png" alt="Apoiar Para Transformar Logo">
+            </a>
+            <nav class="nav-links">
+                <a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank">Nossos Pilares</a>
+                <a href="#impacto">Impacto</a>
+                <a href="#doacao">Seja um doador</a>
+                <a href="https://wa.me/5562993228453" target="_blank" class="btn-gold" style="padding: 10px 24px; font-size: 12px;">Quero Apoiar</a>
+            </nav>
+        </div>
+    </header>
 
-        // --- Mock Component for Icons (Lucide integration via CDN) ---
-        const Icon = ({ name, size = 24, className = "" }) => {
-            const iconRef = useRef(null);
-            useEffect(() => {
-                if (iconRef.current) {
-                    iconRef.current.innerHTML = lucide.createIcons({
-                        icons: { [name]: true },
-                        attrs: { 'stroke-width': 2, width: size, height: size }
-                    });
-                }
-            }, [name, size]);
-            return <span ref={iconRef} className={`inline-block ${className}`} />;
-        };
-
-        const Header = () => {
-            const [isScrolled, setIsScrolled] = useState(false);
-            const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-            useEffect(() => {
-                const handleScroll = () => setIsScrolled(window.scrollY > 20);
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
-
-            const navLinks = [
-                { name: 'Nossos Pilares', href: 'https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing', external: true },
-                { name: 'Impacto', href: '#impacto' },
-                { name: 'Seja um doador', href: '#doacao' },
-            ];
-
-            return (
-                <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'glass-header py-3' : 'bg-transparent py-5'}`}>
-                    <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
-                        <div className="flex-1 md:flex-none flex justify-center md:justify-start">
-                            <a href="#" className="flex items-center group">
-                                <div className="h-20 md:h-28 w-auto overflow-hidden">
-                                    <img src="https://i.imgur.com/0TNZgaJ.png" alt="Logo" className="h-full w-auto object-contain transition-transform group-hover:scale-105" />
-                                </div>
-                            </a>
-                        </div>
-                        <nav className="hidden md:flex items-center gap-8">
-                            {navLinks.map((link) => (
-                                <a key={link.name} href={link.href} target={link.external ? "_blank" : "_self"} className="text-gray-300 font-semibold hover:text-secondary transition-colors text-sm uppercase tracking-wider">
-                                    {link.name}
-                                </a>
-                            ))}
-                            <a href="https://wa.me/5562993228453" target="_blank" className="btn-gold text-[#0f172a] px-6 py-2.5 rounded-full font-bold hover:translate-y-[-2px] transition-all shadow-md active:scale-95 uppercase text-sm tracking-wide">
-                                Quero Apoiar
-                            </a>
-                        </nav>
-                        <button className="md:hidden text-white absolute right-6" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            <Icon name={isMenuOpen ? "X" : "Menu"} size={28} />
-                        </button>
-                    </div>
-                </header>
-            );
-        };
-
-        const Hero = () => (
-            <section className="relative pt-32 pb-20 md:pt-48 md:pb-40 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-                    <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 glass">
-                            <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
-                            <span className="text-secondary text-xs font-bold uppercase tracking-widest">Apoiar Para Transformar</span>
-                        </div>
-                        <h1 className="text-4xl md:text-6xl leading-tight mb-6">Transformando <br/><span className="text-white/90">Vidas e Futuros.</span></h1>
-                        <p className="text-gray-300 text-lg leading-relaxed mb-8 max-w-lg">Suporte integral educacional, profissional, jurídico e psicológico para famílias de pessoas privadas de liberdade no Estado de Goiás.</p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <a href="#doacao" className="btn-gold text-[#0f172a] px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl active:scale-95 uppercase tracking-wide">
-                                Seja um doador <Icon name="Heart" size={20} />
-                            </a>
-                            <a href="https://wa.me/5562993228453" target="_blank" className="px-8 py-4 rounded-xl font-bold border border-white/10 glass text-white flex items-center justify-center gap-2 hover:bg-white/10 transition-all active:scale-95 uppercase tracking-wide">
-                                Fale Conosco <Icon name="MessageCircle" size={20} />
-                            </a>
-                        </div>
-                        <div className="flex gap-12 items-center border-t border-white/10 mt-12 pt-8">
-                            <div><p className="text-secondary font-bold text-3xl">300</p><p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Atendimentos/mês</p></div>
-                            <div className="h-10 w-[1px] bg-white/10"></div>
-                            <div><p className="text-secondary font-bold text-3xl">14k+</p><p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Alcance Regional</p></div>
-                        </div>
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
-                        <div className="aspect-square rounded-[2rem] overflow-hidden glass p-3">
-                            <img src="https://i.imgur.com/pcTYZ8v.png" alt="Apoio Social" className="w-full h-full object-cover rounded-[1.5rem]" />
-                        </div>
-                    </motion.div>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div>
+                <div class="badge">
+                    <span style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block;"></span>
+                    Apoiar Para Transformar
                 </div>
-            </section>
-        );
-
-        const Mission = () => {
-            const [currentSlide, setCurrentSlide] = useState(0);
-            const images = [
-                "https://i.postimg.cc/xjGXYqBP/Whats-App-Image-2026-04-22-at-14-58-58.jpg",
-                "https://i.postimg.cc/QNgFsVvJ/Whats-App-Image-2026-04-22-at-14-58-59.jpg",
-                "https://i.postimg.cc/Y2NvkjT6/Whats-App-Image-2026-04-22-at-14-59-00.jpg",
-                "https://i.postimg.cc/RC3zQYLg/Whats-App-Image-2026-04-22-at-14-58-59-(1).jpg",
-                "https://i.postimg.cc/WpQc975r/Whats-App-Image-2026-04-22-at-14-58-59-(2).jpg",
-                "https://i.postimg.cc/nV6fd13B/Whats-App-Image-2026-04-22-at-14-58-59-(3).jpg"
-            ];
-            useEffect(() => {
-                const timer = setInterval(() => setCurrentSlide((p) => (p + 1) % images.length), 4000);
-                return () => clearInterval(timer);
-            }, [images.length]);
-            return (
-                <section className="py-24 relative overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-                        <div className="order-2 md:order-1 relative">
-                            <div className="glass p-3 rounded-[1.5rem] w-full max-w-lg mx-auto overflow-hidden shadow-2xl relative aspect-[4/3]">
-                                <AnimatePresence mode="wait">
-                                    <motion.img key={currentSlide} src={images[currentSlide]} initial={{ opacity: 0, scale: 1.1 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.8 }} 
-                                        className={`w-full h-full object-cover rounded-[1rem] ${[2,4,5].includes(currentSlide) ? 'object-top' : 'object-center'}`} />
-                                </AnimatePresence>
-                                <div className="absolute bottom-8 left-0 w-full flex justify-center gap-2 z-10">
-                                    {images.map((_, i) => <div key={i} className={`h-1 transition-all duration-300 rounded-full ${i === currentSlide ? 'w-8 bg-secondary' : 'w-2 bg-white/20'}`} />)}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="order-1 md:order-2">
-                            <span className="text-secondary font-bold tracking-widest uppercase text-xs">Transformação Real</span>
-                            <h2 className="text-4xl mt-3 mb-6">Nossa Missão: <br/>Rompendo Ciclos</h2>
-                            <div className="w-16 h-1 bg-secondary/50 mb-8 rounded-full" />
-                            <p className="text-lg text-gray-300 mb-8 leading-relaxed">Baseados nos princípios inalienáveis da <strong>dignidade humana</strong>, oferecemos amparo a quem foi esquecido pela sociedade no Estado de Goiás.</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {['Acolhimento empático', 'Resgate da autoestima', 'Fortalecimento familiar', 'Inclusão Social'].map(i => (
-                                    <div key={i} className="flex items-center gap-3 p-3 glass border border-white/5"><Icon name="CheckCircle2" size={16} className="text-secondary"/><span className="font-semibold text-xs uppercase tracking-wide">{i}</span></div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            );
-        };
-
-        const Partners = () => (
-            <section className="py-16">
-                <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center gap-12 opacity-30 grayscale hover:grayscale-0 transition-all font-bold uppercase tracking-widest">
-                    {['SEBRAE-GO', 'SENAI', 'ACIEG', 'Estado de Goiás'].map(p => <span key={p}>{p}</span>)}
+                <h1>Transformando <br><span>Vidas e Futuros.</span></h1>
+                <p>Suporte integral educacional, profissional, jurídico e psicológico para famílias de pessoas privadas de liberdade no Estado de Goiás.</p>
+                <div class="hero-btns">
+                    <a href="#doacao" class="btn-gold">
+                        Seja um doador
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </a>
+                    <a href="https://wa.me/5562993228453" target="_blank" class="btn-outline">
+                        Fale Conosco
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </a>
                 </div>
-            </section>
-        );
-
-        const ProjectOverview = () => (
-            <section className="py-24 relative">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="glass p-10 md:p-16 border-white/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-10"><Icon name="BookOpen" size={120} className="text-secondary" /></div>
-                        <div className="max-w-3xl">
-                            <span className="text-secondary font-bold tracking-widest uppercase text-xs">Visão Geral</span>
-                            <h2 className="text-3xl md:text-5xl mt-3 mb-8">Nossa Metodologia de Impacto</h2>
-                            <p className="text-gray-300 text-lg leading-relaxed mb-12">Estruturado em eixos de Educação, Empreendedorismo, Assistência Jurídica e Acompanhamento Psicológico para autonomia das famílias.</p>
-                            <a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank" className="btn-gold text-primary px-8 py-4 rounded-xl font-bold inline-flex items-center gap-3 uppercase tracking-wide group">
-                                Ler Documento Completo <Icon name="ExternalLink" size={20} />
-                            </a>
-                        </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>300</h3>
+                        <p>Atendimentos/mês</p>
+                    </div>
+                    <div style="width: 1px; background: var(--glass-border);"></div>
+                    <div class="stat-item">
+                        <h3>14k+</h3>
+                        <p>Alcance Regional</p>
                     </div>
                 </div>
-            </section>
-        );
+            </div>
+            <div class="hero-img glass">
+                <img src="https://i.imgur.com/pcTYZ8v.png" alt="Apoio ONG">
+            </div>
+        </div>
+    </section>
 
-        const Pillars = () => (
-            <section id="pilares" className="py-24">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Eixos de Atuação</span>
-                        <h2 className="text-3xl md:text-5xl mt-3 mb-4">Os 4 Pilares do Apoio</h2>
+    <!-- Partners -->
+    <div class="partners">
+        <div class="container partner-list">
+            <span>SEBRAE-GO</span>
+            <span>SENAI</span>
+            <span>ACIEG</span>
+            <span>ESTADO DE GOIÁS</span>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <section class="section-padding">
+        <div class="container mission-grid">
+            <div class="order-2">
+                <div class="slider-container">
+                    <div class="slider-wrapper" id="slider">
+                        <img src="https://i.postimg.cc/xjGXYqBP/Whats-App-Image-2026-04-22-at-14-58-58.jpg" class="slide active">
+                        <img src="https://i.postimg.cc/QNgFsVvJ/Whats-App-Image-2026-04-22-at-14-58-59.jpg" class="slide">
+                        <img src="https://i.postimg.cc/Y2NvkjT6/Whats-App-Image-2026-04-22-at-14-59-00.jpg" class="slide pos-top">
+                        <img src="https://i.postimg.cc/RC3zQYLg/Whats-App-Image-2026-04-22-at-14-58-59-(1).jpg" class="slide">
+                        <img src="https://i.postimg.cc/WpQc975r/Whats-App-Image-2026-04-22-at-14-58-59-(2).jpg" class="slide pos-top">
+                        <img src="https://i.postimg.cc/nV6fd13B/Whats-App-Image-2026-04-22-at-14-58-59-(3).jpg" class="slide pos-top">
                     </div>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                        {[
-                            {t: 'Educacional', d: 'Foco em alfabetização e parcerias com o EJA.', i: '🎓'},
-                            {t: 'Empreendedorismo', d: 'Oficinas de costura, hortas e gestão.', i: '🧵'},
-                            {t: 'Jurídico', d: 'Garantia de direitos e orientação processual.', i: '⚖️'},
-                            {t: 'Psicológico', d: 'Acolhimento para mulheres e crianças.', i: '🧠'}
-                        ].map(p => (
-                            <div key={p.t} className="glass p-8 flex flex-col items-center">
-                                <div className="w-16 h-16 pillar-icon rounded-2xl flex items-center justify-center mb-6 text-3xl">{p.i}</div>
-                                <h3 className="text-xl mb-4">{p.t}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed">{p.d}</p>
-                            </div>
-                        ))}
+                    <div class="slider-dots" id="dots">
+                        <div class="dot active"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
                     </div>
                 </div>
-            </section>
-        );
+            </div>
+            <div>
+                <span class="badge" style="color: grey;">Transformação Real</span>
+                <h2 style="font-size: 40px; line-height: 1.2; margin-bottom: 24px;">Nossa Missão: <br>Rompendo Ciclos</h2>
+                <div style="width: 60px; height: 4px; background: var(--primary); margin-bottom: 32px; border-radius: 4px;"></div>
+                <p style="font-size: 18px; color: var(--text-dim); margin-bottom: 24px;">Baseados nos princípios inalienáveis da <b>dignidade humana</b>, trabalhamos para oferecer amparo a quem foi esquecido pela sociedade.</p>
+                <p style="font-size: 18px; color: var(--text-dim);">Trabalhamos para prover as ferramentas necessárias para romper o ciclo de exclusão social através do suporte integral no Estado de Goiás.</p>
+            </div>
+        </div>
+    </section>
 
-        const Donations = () => (
-            <section className="py-24 relative overflow-hidden">
-                <div id="doacao" className="absolute -top-24"></div>
-                <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <span className="text-secondary font-bold tracking-widest uppercase text-xs">Ajuda Fundamental</span>
-                        <h2 className="text-3xl md:text-5xl mt-3 mb-6">Doações via PIX</h2>
-                        <p className="text-lg text-gray-300 mb-8 leading-relaxed">Escaneie o QR Code ao lado para realizar sua doação e nos ajude a expandir nossa missão no Estado de Goiás.</p>
-                        <a href="https://wa.me/5562993228453" target="_blank" className="inline-flex items-center gap-3 border border-white/20 glass text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-white/10 active:scale-95 text-sm">
-                            Tirar Dúvidas <Icon name="MessageCircle" size={20} className="text-secondary"/>
+    <!-- Project Overview -->
+    <section class="section-padding">
+        <div class="container glass" style="padding: 60px;">
+            <div style="max-width: 800px;">
+                <span class="badge" style="color: grey;">Visão Geral</span>
+                <h2 style="font-size: 40px; margin-bottom: 32px;">Conheça Nossa Metodologia de Impacto</h2>
+                <p style="color: var(--text-dim); font-size: 18px; margin-bottom: 40px;">O projeto <b>Apoiar para Transformar</b> estrutura-se em eixos fundamentais que visam a reintegração social e o fortalecimento de vínculos familiares. Através de frentes Educacionais, de Empreendedorismo, Assistência Jurídica e Acompanhamento Psicológico.</p>
+                <a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank" class="btn-gold">
+                    Ler Documento Completo
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillars -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="pillars-header">
+                <span class="badge" style="color: grey;">Eixos de Atuação</span>
+                <h2 style="font-size: 48px;">Os 4 Pilares do Apoio</h2>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card glass">
+                    <span class="pillar-icon">🎓</span>
+                    <h3>Educacional</h3>
+                    <p>Foco em alfabetização e parcerias estratégicas com o EJA para jovens e adultos.</p>
+                </div>
+                <div class="pillar-card glass">
+                    <span class="pillar-icon">🧵</span>
+                    <h3>Empreendedorismo</h3>
+                    <p>Oficinas de costura, informática, hortas e gestão de pequenos negócios locais.</p>
+                </div>
+                <div class="pillar-card glass">
+                    <span class="pillar-icon">⚖️</span>
+                    <h3>Jurídico</h3>
+                    <p>Orientação sobre processos e garantia de direitos trabalhistas e previdenciários.</p>
+                </div>
+                <div class="pillar-card glass">
+                    <span class="pillar-icon">🧠</span>
+                    <h3>Psicológico</h3>
+                    <p>Acolhimento individual e em grupo, focado em mulheres e crianças.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="section-padding" style="position: relative;">
+        <div id="impacto"></div>
+        <div class="container glass" style="padding: 60px; text-align: center;">
+            <h2 style="color: var(--primary); font-size: 48px; margin-bottom: 48px;">Nosso Impacto em Números</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;">
+                <div>
+                    <h4 style="font-size: 60px;">300</h4>
+                    <p style="color: var(--primary); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ATENDIMENTOS MENSAIS</p>
+                </div>
+                <div class="glass" style="padding: 20px;">
+                    <h4 style="font-size: 60px;">14k+</h4>
+                    <p style="color: var(--primary); font-size: 10px; font-weight: bold; letter-spacing: 2px;">ALCANCE ESTADUAL</p>
+                </div>
+                <div>
+                    <h4 style="font-size: 60px;">100%</h4>
+                    <p style="color: var(--primary); font-size: 10px; font-weight: bold; letter-spacing: 2px;">SERVIÇOS GRATUITOS</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donations -->
+    <section class="section-padding" style="position: relative;">
+        <div id="doacao"></div>
+        <div class="container donation-grid">
+            <div>
+                <span class="badge" style="color: grey;">Sua Ajuda é Fundamental</span>
+                <h2 style="font-size: 48px; margin-bottom: 24px;">Doações via PIX</h2>
+                <p style="color: var(--text-dim); font-size: 18px; margin-bottom: 40px;">Cada contribuição nos permite expandir nossa atuação e oferecer mais suporte jurídico, psicológico e profissional para quem mais precisa. Escaneie o QR Code ao lado.</p>
+                <a href="https://wa.me/5562993228453" target="_blank" class="btn-outline">
+                    Tirar Dúvidas
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </a>
+            </div>
+            <div class="qr-box glass">
+                <img src="https://i.postimg.cc/KvR4TQRP/Doacao-Apoiar-Para-Transformar.jpg" alt="QR Code PIX">
+                <p>Apoiar Para Transformar</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteer -->
+    <section class="section-padding">
+        <div class="container glass volunteer-box">
+            <h2>Seja um Voluntário</h2>
+            <p>Sua dedicação pode transformar o futuro de muitas famílias. Junte-se a nós nesta missão de amor e dignidade no Estado de Goiás.</p>
+            <a href="https://wa.me/5562993228453" target="_blank" class="btn-gold">
+                Quero ser Voluntário
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding" style="position: relative;">
+        <div id="faq"></div>
+        <div class="container">
+            <h2 style="text-align: center; font-size: 32px; margin-bottom: 48px;">Dúvidas Frequentes</h2>
+            <div class="faq-wrapper">
+                <div class="faq-item active">
+                    <div class="faq-header">
+                        <span>Como posso me tornar um voluntário?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                    <div class="faq-body">Entre em contato pelo nosso WhatsApp. Temos vagas para assistência jurídica, psicólogos e mentores.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Aceitam doações de materiais?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                    <div class="faq-body">Sim! Aceitamos equipamentos de informática, máquinas de costura e materiais didáticos.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Quem pode ser atendido pela ONG?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </div>
+                    <div class="faq-body">Familiares de pessoas privadas de liberdade em situação de vulnerabilidade em todo o Estado de Goiás.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">
+                        <img src="https://i.imgur.com/0TNZgaJ.png" alt="Logo">
+                    </div>
+                    <p style="color: var(--text-dim); max-width: 320px; font-size: 14px;">Restauração da dignidade humana e inclusão produtiva para famílias no Estado de Goiás.</p>
+                    <div class="contact-info">
+                        <span style="color: #22c55e;">● Presente em Goiás</span>
+                        <a href="https://www.instagram.com/apoiarparatransformar" target="_blank">@apoiarparatransformar</a>
+                        <a href="https://wa.me/5562993228453" target="_blank" style="display: flex; align-items: center; gap: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            (62) 99322-8453
                         </a>
                     </div>
-                    <div className="flex justify-center">
-                        <div className="glass p-6 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-                            <img src="https://i.postimg.cc/KvR4TQRP/Doacao-Apoiar-Para-Transformar.jpg" alt="QR PIX" className="w-full h-auto rounded-[1.5rem]" />
-                            <p className="text-center text-gray-400 mt-6 text-xs uppercase tracking-widest font-bold">Apoiar Para Transformar</p>
-                        </div>
+                    <div class="flag">
+                        <img src="https://i.postimg.cc/tRvsS86k/imgi-45-500px-Flag-of-Goias-svg.png" alt="Goiás">
                     </div>
                 </div>
-            </section>
-        );
-
-        const Volunteer = () => (
-            <section className="py-24">
-                <div className="max-w-7xl mx-auto px-6 text-center glass p-12 md:p-20 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-secondary/5 -z-10" />
-                    <h2 className="text-4xl md:text-6xl font-bold mb-6">Seja um Voluntário</h2>
-                    <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10">Sua dedicação pode transformar o futuro de muitas famílias. Junte-se a nós!</p>
-                    <a href="https://wa.me/5562993228453" target="_blank" className="btn-gold text-primary px-10 py-5 rounded-xl font-bold uppercase tracking-widest shadow-2xl inline-flex items-center gap-3">
-                        Quero ser Voluntário <Icon name="MessageCircle" size={24} />
-                    </a>
+                <div class="footer-links">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank">Nossos Pilares</a></li>
+                        <li><a href="#impacto">Impacto</a></li>
+                        <li><a href="#doacao">Seja um doador</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
                 </div>
-            </section>
-        );
-
-        const FAQ = () => {
-            const [open, setOpen] = useState(0);
-            return (
-                <section id="faq" className="py-24 relative">
-                    <div id="faq" className="absolute -top-24"></div>
-                    <div className="max-w-3xl mx-auto px-6">
-                        <h2 className="text-center text-3xl mb-12">Dúvidas Frequentes</h2>
-                        <div className="space-y-4">
-                            {[
-                                {q: 'Como ser voluntário?', a: 'Entre em contato pelo nosso WhatsApp. Temos vagas para assistência jurídica, psicólogos e mentores.'},
-                                {q: 'Aceitam doações de materiais?', a: 'Sim! Aceitamos equipamentos de informática, máquinas de costura e materiais didáticos.'},
-                                {q: 'Quem atendemos?', a: 'Familiares de pessoas privadas de liberdade em vulnerabilidade em Goiás.'}
-                            ].map((f, i) => (
-                                <div key={i} className="glass overflow-hidden">
-                                    <button className="w-full flex justify-between p-6 text-left font-bold uppercase text-sm tracking-wide" onClick={() => setOpen(open === i ? -1 : i)}>
-                                        {f.q} <Icon name={open === i ? "Minus" : "Plus"} size={20} className="text-secondary" />
-                                    </button>
-                                    {open === i && <div className="px-6 pb-6 text-gray-400 text-sm leading-relaxed">{f.a}</div>}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            );
-        };
-
-        const Footer = () => (
-            <footer className="pt-20 pb-10 border-t border-white/10">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid md:grid-cols-4 gap-12 mb-16">
-                        <div className="col-span-2">
-                            <img src="https://i.imgur.com/0TNZgaJ.png" alt="Logo" className="h-28 w-auto mb-6 object-contain" />
-                            <p className="text-gray-400 max-w-sm mb-8 text-sm">Restauração da dignidade humana e inclusão produtiva para famílias no Estado de Goiás.</p>
-                            <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-xs text-gray-500 uppercase tracking-widest font-bold">
-                                <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500" /> Presente em Goiás</span>
-                                <a href="https://instagram.com/apoiarparatransformar" target="_blank" className="hover:text-white transition-colors">@apoiarparatransformar</a>
-                                <a href="https://wa.me/5562993228453" target="_blank" className="hover:text-white transition-colors flex items-center gap-1 font-bold whitespace-nowrap">
-                                    <Icon name="MessageCircle" size={14} className="text-secondary" /> (62) 99322-8453
-                                </a>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-6">Explore</h4>
-                            <ul className="space-y-4 text-sm font-semibold text-gray-400">
-                                <li><a href="https://drive.google.com/file/d/1Oj5-6pD40blHJvVwlsSQr8HbIAbi0Hor/view?usp=sharing" target="_blank" className="hover:text-white transition-colors">Nossos Pilares</a></li>
-                                <li><a href="#impacto" className="hover:text-white transition-colors">Impacto</a></li>
-                                <li><a href="#doacao" className="hover:text-white transition-colors">Doador</a></li>
-                            </ul>
-                        </div>
-                        <div><h4 className="text-xs uppercase tracking-widest font-bold text-gray-500 mb-6">Apoio</h4><div className="flex flex-col gap-2 text-[10px] text-gray-500 font-bold uppercase"><span>SEBRAE-GO</span><span>SENAI</span><span>ACIEG</span><span>Estado de Goiás</span></div></div>
-                    </div>
-                    <div className="pt-10 border-t border-white/5 text-center text-gray-500 text-[10px] font-bold uppercase tracking-widest">
-                        <p>© 2026 ONG Apoiar para Transformar. Todos os Direitos Reservados.</p>
-                    </div>
+                <div class="footer-links">
+                    <h4>Apoio</h4>
+                    <ul style="opacity: 0.5; color: #64748b; font-size: 10px; font-weight: bold; letter-spacing: 1px;">
+                        <li>SEBRAE-GO</li>
+                        <li>SENAI</li>
+                        <li>ACIEG</li>
+                        <li>PREFEITURAS LOCAIS</li>
+                    </ul>
                 </div>
-            </footer>
-        );
+            </div>
+            <div class="copyright">
+                <p>© 2026 ONG Apoiar Para Transformar. Todos os Direitos Reservados.</p>
+                <p style="opacity: 0.5;">Dignidade Humana • Fortalecimento Familiar • Inclusão</p>
+            </div>
+        </div>
+    </footer>
 
-        function App() {
-            return (
-                <div className="antialiased overflow-x-hidden">
-                    <Header />
-                    <main>
-                        <Hero />
-                        <Partners />
-                        <Mission />
-                        <ProjectOverview />
-                        <Pillars />
-                        <motion.div id="impacto" className="relative scroll-mt-24"><div className="max-w-7xl mx-auto px-6"><div className="glass p-12 text-center">
-                            <h2 className="text-secondary text-5xl mb-12">Impacto em Números</h2>
-                            <div className="grid md:grid-cols-3 gap-12 font-bold uppercase tracking-widest">
-                                <div><p className="text-6xl text-white mb-2">300</p><p className="text-[10px] text-secondary">Atendimentos/mês</p></div>
-                                <div className="glass border-amber-500/20 p-8"><p className="text-6xl text-white mb-2">14k+</p><p className="text-[10px] text-secondary">Alcance Estadual</p></div>
-                                <div><p className="text-6xl text-white mb-2">100%</p><p className="text-[10px] text-secondary">Gratuidade</p></div>
-                            </div>
-                        </div></div></motion.div>
-                        <Donations />
-                        <Volunteer />
-                        <FAQ />
-                    </main>
-                    <Footer />
-                    {/* Floating WhatsApp */}
-                    <a href="https://wa.me/5562993228453" target="_blank" className="fixed bottom-8 right-8 z-[100] w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl">
-                        <Icon name="MessageCircle" size={32} />
-                    </a>
-                </div>
-            );
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/5562993228453" target="_blank" class="whatsapp-float">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // --- Header Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // --- Mission Slider ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        function showSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        setInterval(() => {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }, 4000);
+
+        // Permitir clique nos pontos
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => showSlide(i));
+        });
+
+        // --- FAQ Toggle ---
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const header = item.querySelector('.faq-header');
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            });
+        });
+
+        // --- Smooth Scroll for Anchor Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
